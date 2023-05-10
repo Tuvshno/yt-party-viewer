@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>YouTube Draw</title>
+    <style>
+        body, html { height: 100%; margin: 0; padding: 0; overflow: hidden; }
+        #canvas, #video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        #video { z-index: 1; }
+        #canvas { z-index: 0; }
+        #btnToggle, #colorPicker, #penSize, #clearCanvas, #penSizeDisplay { position: absolute; right: 0; z-index: 3; }
+        #colorPicker { top: 40px; }
+        #penSize { top: 80px; }
+        #penSizeDisplay { top: 80px; right: 50px; }
+        #clearCanvas { top: 120px; }
+    </style>
+</head>
+<body>
+    <div id="player">
+        <iframe id="video" src="https://www.youtube.com/embed/SfSRvJAepao?autoplay=1&mute=1" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
+        <canvas id="canvas"></canvas>
+        <button id="btnToggle">Switch to Drawing</button>
+        <input id="colorPicker" type="color" value="#FF0000">
+        <input id="penSize" type="range" min="1" max="10" value="1">
+        <span id="penSizeDisplay">1</span>
+        <button id="clearCanvas">Clear Canvas</button>
+    </div>
+
+    <script>
+      var canvas = document.getElementById('canvas');
+      var ctx = canvas.getContext('2d');
+      var btnToggle = document.getElementById('btnToggle');
+      var colorPicker = document.getElementById('colorPicker');
+      var penSize = document.getElementById('penSize');
+      var penSizeDisplay = document.getElementById('penSizeDisplay');
+      var clearCanvas = document.getElementById('clearCanvas');
+
+
+      // Make the canvas the same size as the window
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+  
+      var drawing = false;
+      var drawMode = false;
+  
+      ctx.strokeStyle = colorPicker.value; // Set the initial stroke color to match the input
+  
+      btnToggle.onclick = function() {
+          drawMode = !drawMode;
+          if (drawMode) {
+              canvas.style.zIndex = 2;
+              btnToggle.textContent = 'Switch to Interacting';
+          } else {
+              canvas.style.zIndex = 0;
+              btnToggle.textContent = 'Switch to Drawing';
+          }
+      };
+  
+      colorPicker.onchange = function() {
+          ctx.strokeStyle = this.value;
+      };
+  
+      penSize.onchange = function() {
+          ctx.lineWidth = this.value;
+          penSizeDisplay.textContent = this.value;
+      };
+  
+      clearCanvas.onclick = function() {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+      };
+  
+      canvas.onmousedown = function(e) {
+          if(!drawMode) return;
+  
+          drawing = true;
+          ctx.beginPath();
+          ctx.moveTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+      };
+  
+      canvas.onmouseup = function() {
+          if(!drawMode) return;
+  
+          drawing = false;
+      };
+  
+      canvas.onmousemove = function(e) {
+          if(!drawMode || !drawing) return;
+  
+          ctx.lineTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+          ctx.stroke();
+      };
+  </script>
+</body>
+</html>
