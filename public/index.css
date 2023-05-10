@@ -1,0 +1,49 @@
+body, html {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  position: relative;
+}
+
+#player {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#player iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+#btnToggle {
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 9999; /* a high value to ensure it appears above other elements */
+}
+
+
+#btnToggle, #colorPicker, #penSize, #clearCanvas, #penSizeDisplay {
+  position: absolute;
+  right: 0;
+  z-index: 3;
+}
+#colorPicker {
+  top: 40px;
+}
+#penSize {
+  top: 80px;
+}
+#penSizeDisplay {
+  top: 80px;
+  right: 50px;
+}
+#clearCanvas {
+  top: 120px;
+}
