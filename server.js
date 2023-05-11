@@ -1,24 +1,37 @@
-// server.js
 const express = require('express');
-const http = require('http');
-const socketIo = require('socket.io');
-
 const app = express();
+const http = require('http');
 const server = http.createServer(app);
-const io = socketIo(server);
+const { Server } = require("socket.io");
+const io = new Server(server);
 
-let videoTime = 0;
-
-io.on('connection', (socket) => {
-    // Send the current video time to the new client
-    socket.emit('videoTime', videoTime);
-    console.log(videoTime)
-
-    // When a client changes the video time, update it for all clients
-    socket.on('videoTime', (time) => {
-        videoTime = time;
-        socket.broadcast.emit('videoTime', time);
-    });
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/index.html');
 });
 
-server.listen(3000, () => console.log('Server listening on port 3000'));
+io.on('connection', (socket) => {
+  console.log('a user connected');
+});
+
+server.listen(3000, () => {
+  console.log('listening on *:3000');
+});
+
+
+
+
+
+
+
+// io.on('connection', (socket) => {
+//     // Send the current video time to the new client
+//     socket.emit('videoTime', videoTime);
+//     console.log(videoTime)
+
+//     // When a client changes the video time, update it for all clients
+//     socket.on('videoTime', (time) => {
+//         videoTime = time;
+//         socket.broadcast.emit('videoTime', time);
+//     });
+// });
+
